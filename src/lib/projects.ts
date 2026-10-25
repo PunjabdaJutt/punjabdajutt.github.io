@@ -1,5 +1,11 @@
 export type MediaBlock =
-  | { kind: "video-loop"; src: string; poster: string; alt: string }
+  | {
+      kind: "video-loop";
+      src: string;
+      poster: string;
+      alt: string;
+      fit?: "cover" | "contain";
+    }
   | { kind: "youtube"; id: string; title: string }
   | {
       kind: "image";
@@ -47,6 +53,7 @@ export const projects: Project[] = [
       src: "/media/video/thesis-grasp-loop.mp4",
       poster: "/media/photos/thesis-grasp-frame.jpg",
       alt: "Unitree G1 hand gripping a cylindrical object on a stool during a real grasp run",
+      fit: "contain",
     },
     problem:
       "Give a 5-finger humanoid hand a grip controller with a provable safety guarantee, not just a tuned PID, then carry that guarantee from a simulated hand through to a real one with no torque sensing at the fingers.",

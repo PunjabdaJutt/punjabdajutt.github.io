@@ -6,7 +6,11 @@ export function Media({ media }: { media: MediaBlock }) {
     case "video-loop":
       return (
         <video
-          className="aspect-video w-full rounded-2xl bg-surface object-cover"
+          className={
+            media.fit === "contain"
+              ? "mx-auto aspect-[9/16] max-h-[640px] w-auto rounded-2xl bg-surface object-contain"
+              : "aspect-video w-full rounded-2xl bg-surface object-cover"
+          }
           src={media.src}
           poster={media.poster}
           autoPlay

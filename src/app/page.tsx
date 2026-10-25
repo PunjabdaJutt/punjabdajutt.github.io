@@ -110,20 +110,7 @@ export default function Home() {
           {/* Featured showcase */}
           <div className="panel mt-10 grid gap-8 overflow-hidden p-6 lg:grid-cols-12 lg:gap-10 lg:p-10">
             <div className="flex lg:col-span-6 lg:items-center">
-              {flagship.hero.kind === "video-loop" ? (
-                <video
-                  className="mx-auto aspect-[9/16] max-h-[640px] w-auto rounded-2xl bg-surface object-contain"
-                  src={flagship.hero.src}
-                  poster={flagship.hero.poster}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  aria-label={flagship.hero.alt}
-                />
-              ) : (
-                <Media media={flagship.hero} />
-              )}
+              <Media media={flagship.hero} />
             </div>
             <div className="lg:col-span-6 lg:self-center">
               <p className="font-mono text-xs uppercase tracking-wide text-accent">
