@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --background: #abbab9;
+  --surface: #e7e2d8;
+  --panel: #fdfcfa;
+  --foreground: #1e1e1e;
+  --muted: #3d3d3d;
+  --border: rgba(30, 30, 30, 0.16);
+  --accent: #b23f8f;
+  --accent-bright: #d45bb6;
+  --accent-soft: #f6dcee;
+  --accent-ink: #6f2c5c;
+  --panel-shadow: 0 8px 24px rgba(30, 30, 30, 0.14);
+  --panel-shadow-hover: 0 16px 36px rgba(30, 30, 30, 0.2);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --font-sans: var(--font-display);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--panel-shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .panel-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--panel-shadow-hover);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
