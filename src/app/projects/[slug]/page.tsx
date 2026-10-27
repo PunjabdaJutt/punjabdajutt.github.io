@@ -1,11 +1,45 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Media } from "@/components/Media";
-import { getProject, projects } from "@/lib/projects";
+import { ApproachBlock, getProject, projects } from "@/lib/projects";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
+
+type ApproachGroup =
+  | { kind: "full"; block: ApproachBlock }
+  | { kind: "grid"; blocks: ApproachBlock[] };
+
+function groupApproach(approach: ApproachBlock[]): ApproachGroup[] {
+  const groups: ApproachGroup[] = [];
+  let buffer: ApproachBlock[] = [];
+
+  const flushBuffer = () => {
+    for (let i = 0; i < buffer.length; i += 3) {
+      groups.push({ kind: "grid", blocks: buffer.slice(i, i + 3) });
+    }
+    buffer = [];
+  };
+
+  for (const block of approach) {
+    if (block.fullWidth) {
+      flushBuffer();
+      groups.push({ kind: "full", block });
+    } else {
+      buffer.push(block);
+    }
+  }
+  flushBuffer();
+
+  return groups;
+}
+
+const gridCols: Record<number, string> = {
+  1: "sm:grid-cols-1",
+  2: "sm:grid-cols-2",
+  3: "sm:grid-cols-2 lg:grid-cols-3",
+};
 
 export default async function ProjectPage({
   params,
@@ -71,26 +105,50 @@ export default async function ProjectPage({
           Approach
         </p>
         <div className="mt-10 flex flex-col gap-8">
-          {project.approach.map((block) => (
-            <div
-              key={block.heading}
-              className="panel panel-hover grid gap-8 p-6 sm:p-8 lg:grid-cols-12"
-            >
-              <div className="lg:col-span-5 lg:self-center">
-                <h3 className="text-lg font-semibold text-foreground">
-                  {block.heading}
-                </h3>
-                <p className="mt-3 max-w-md text-base leading-relaxed text-muted">
-                  {block.body}
-                </p>
-              </div>
-              {block.media && (
-                <div className="lg:col-span-6 lg:col-start-7">
-                  <Media media={block.media} />
+          {groupApproach(project.approach).map((group, i) =>
+            group.kind === "full" ? (
+              <div
+                key={group.block.heading}
+                className="panel panel-hover grid gap-8 p-6 sm:p-8 lg:grid-cols-12"
+              >
+                <div className="lg:col-span-5 lg:self-center">
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {group.block.heading}
+                  </h3>
+                  <p className="mt-3 max-w-md text-base leading-relaxed text-muted">
+                    {group.block.body}
+                  </p>
                 </div>
-              )}
-            </div>
-          ))}
+                {group.block.media && (
+                  <div className="lg:col-span-6 lg:col-start-7">
+                    <Media media={group.block.media} />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div
+                key={i}
+                className={`grid gap-6 ${gridCols[group.blocks.length] ?? gridCols[3]}`}
+              >
+                {group.blocks.map((block) => (
+                  <article
+                    key={block.heading}
+                    className="panel panel-hover flex flex-col overflow-hidden"
+                  >
+                    {block.media && <Media media={block.media} />}
+                    <div className="flex flex-1 flex-col gap-2 p-5 sm:p-6">
+                      <h3 className="text-base font-semibold text-foreground">
+                        {block.heading}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-muted">
+                        {block.body}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ),
+          )}
         </div>
       </section>
 

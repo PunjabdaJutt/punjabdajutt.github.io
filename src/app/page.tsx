@@ -10,7 +10,14 @@ import {
 import { Media } from "@/components/Media";
 import { ProjectsGrid } from "@/components/ProjectsGrid";
 import { HeroTypewriter } from "@/components/HeroTypewriter";
-import { education, person, projects, skillCategories } from "@/lib/projects";
+import {
+  currentRole,
+  education,
+  person,
+  projects,
+  skillCategories,
+  softwareTools,
+} from "@/lib/projects";
 
 const icons = {
   control: Sliders,
@@ -104,7 +111,7 @@ export default function Home() {
             {flagship.title}
           </h2>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
-            {flagship.role} · {flagship.dates} · {flagship.context}
+            {flagship.role} · {flagship.context}
           </p>
 
           {/* Featured showcase */}
@@ -114,7 +121,7 @@ export default function Home() {
             </div>
             <div className="lg:col-span-6 lg:self-center">
               <p className="font-mono text-xs uppercase tracking-wide text-accent">
-                Problem
+                Overview
               </p>
               <p className="mt-3 text-base leading-relaxed text-foreground">
                 {flagship.problem}
@@ -168,6 +175,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Current Role */}
+      <section
+        id="current-role"
+        className="border-t border-border px-6 py-20 sm:px-10 lg:px-16"
+      >
+        <div className="mx-auto max-w-6xl">
+          <p className="font-mono text-xs uppercase tracking-wide text-accent">
+            Current Role
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
+            {currentRole.title}
+          </h2>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
+            {currentRole.institution} · {currentRole.dates}
+          </p>
+
+          <div className="panel mt-8 grid gap-8 overflow-hidden p-6 lg:grid-cols-12 lg:gap-10 lg:p-10">
+            <div className="flex lg:col-span-6 lg:items-center">
+              <Media media={currentRole.image} />
+            </div>
+            <div className="lg:col-span-6 lg:self-center">
+              <p className="text-base leading-relaxed text-foreground">
+                {currentRole.detail}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Education */}
       <section id="education" className="border-t border-border px-6 py-20 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-6xl">
@@ -181,12 +217,16 @@ export default function Home() {
                 className="panel panel-hover flex flex-col overflow-hidden"
               >
                 {entry.image && (
-                  <div className="aspect-[21/9] w-full overflow-hidden bg-surface">
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-surface">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={entry.image.src}
                       alt={entry.image.alt}
-                      className="h-full w-full object-cover"
+                      className={
+                        entry.image.fit === "contain"
+                          ? "h-full w-full object-contain p-4"
+                          : "h-full w-full object-cover"
+                      }
                     />
                   </div>
                 )}
@@ -254,6 +294,45 @@ export default function Home() {
               );
             })}
           </div>
+
+          <h3 className="mt-16 text-sm font-mono uppercase tracking-wide text-muted">
+            Software &amp; Tools
+          </h3>
+          <div className="mt-6 grid grid-cols-3 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+            {softwareTools.map((tool) => (
+              <div
+                key={tool.name}
+                className="panel panel-hover flex flex-col items-center gap-3 p-5 text-center"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={tool.logo} alt={`${tool.name} logo`} className="h-10 w-10" />
+                <span className="font-mono text-[11px] text-foreground">{tool.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hobbies */}
+      <section
+        id="hobbies"
+        className="border-t border-border px-6 py-20 sm:px-10 lg:px-16"
+      >
+        <div className="mx-auto max-w-6xl">
+          <p className="font-mono text-xs uppercase tracking-wide text-muted">
+            Outside the Lab
+          </p>
+          <h2 className="mt-2 max-w-xl text-2xl font-semibold tracking-tight text-foreground">
+            Co-Founder, Mango Millionaires
+          </h2>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-foreground">
+            A mango fruit roll company, converting delicious mangoes into
+            fruit rolls and total world domination (someday). Revenue: not
+            yet. Product: not yet. Mangoes: plenty.
+          </p>
+          <p className="mt-2 max-w-xl font-mono text-sm text-muted">
+            Status: in development.
+          </p>
         </div>
       </section>
 
@@ -270,12 +349,16 @@ export default function Home() {
             Where this goes next
           </h2>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-foreground">
-            Where this goes next is Vision-Language-Action (VLA) models —
-            closing the loop from perception and language straight into
-            control, instead of treating them as separate stages. I&apos;m
-            currently working with students on a Vision-Language Model (VLM)
-            pipeline for autonomous picking and placement of objects, in
-            collaboration with Philips.
+            Currently I am working as a research assistant at the University
+            of Groningen, where I&apos;m writing a conference paper on a
+            novel passivity-based control application on the Unitree G1 for
+            autonomous movement. Where this goes next is connecting
+            nonlinear, passivity-based control theory to factory
+            environments for dexterous manipulation and autonomous movement
+            — through Vision-Language-Action (VLA) models and model-based
+            control for locomotion, closing the loop from perception and
+            language straight into control instead of treating them as
+            separate stages.
           </p>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-foreground">
             I&apos;m looking for roles in robotics control and simulation —
@@ -284,10 +367,13 @@ export default function Home() {
             and systems engineering.
           </p>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">
-            My interest spans humanoid and mobile manipulation robotics,
-            fusion and energy-systems control, and precision mechatronics.
-            Open to roles across the Netherlands, the wider EU, the UK, and
-            the US, available after my MSc in November 2026.
+            My interest now is in robotics applications in autonomous
+            manipulation for factory-level usage, and tackling the various
+            problems that come with implementing these solutions — spanning
+            humanoid and mobile manipulation robotics, fusion and
+            energy-systems control, and precision mechatronics. Open to roles
+            across the Netherlands, the wider EU, the UK, and the US,
+            available after my MSc in November 2026.
           </p>
         </div>
       </section>

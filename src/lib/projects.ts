@@ -20,6 +20,7 @@ export type ApproachBlock = {
   heading: string;
   body: string;
   media?: MediaBlock;
+  fullWidth?: boolean;
 };
 
 export type Project = {
@@ -56,7 +57,7 @@ export const projects: Project[] = [
       fit: "contain",
     },
     problem:
-      "Give a 5-finger humanoid hand a grip controller with a provable safety guarantee, not just a tuned PID, then carry that guarantee from a simulated hand through to a real one with no torque sensing at the fingers.",
+      "In charge of foundational robot-learning work on the University of Groningen's Unitree G1, building its entire software and safety stack from the ground up — a ROS 2 integration, a Python Unitree SDK layer, and the safety systems guarding the hardware — starting from nothing but the robot's base position-PID joint control, and developing demos for company visits. For the thesis: a novel passivity-based control stack that replaces that baseline control on the hand, giving the G1 a grasp controller with a proven safety guarantee instead of just tuned gains, carried from simulation onto the real hand for picking up objects.",
     approach: [
       {
         heading: "Control and theory",
@@ -89,7 +90,8 @@ export const projects: Project[] = [
       },
       {
         heading: "Hardware validation",
-        body: "The HAND12 energy-based control layer — a mode-switched IDA-PBC law that shapes an impedance-style position controller in free space and a force-regulating law once contact is made — ran five full grasp-pipeline runs on the real G1, plus an arm-bench comparison against a position-PD baseline.",
+        fullWidth: true,
+        body: "Physical setup: the G1 mounted on a gantry test stand, right Inspire hand enabled for closed-loop grasp attempts on a cylindrical test object, arm held in a fixed pose under position-PD. The HAND12 control layer mode-switches between an impedance-style position law in free space and a force-regulating law once contact is made.",
         media: {
           kind: "image",
           src: "/media/photos/thesis-hw-lab-setup-grasp.jpg",
@@ -99,20 +101,21 @@ export const projects: Project[] = [
       },
       {
         heading: "Logged telemetry",
-        body: "Per-finger angle and contact force through grasp and lift-hold, checked against a guard band and the hand's own force limits. The thumb-yaw force channel is the one with the faulty sensor, excluded from the control loop and reported, not hidden.",
+        fullWidth: true,
+        body: "Arm joint tracking through the grasp sequence — shoulder pitch, elbow, and wrist pitch — comparing the passivity-shaped controller (PH) against a position-PD baseline. Hold error stays close between the two, within roughly 0.02–0.08 rad across all three joints, showing the passivity-shaped law tracks as tightly as the tuned PD baseline it's replacing.",
         media: {
           kind: "image",
-          src: "/media/photos/thesis-grasp-telemetry.png",
-          alt: "Plots of finger angle, contact force, and thumb-yaw force over time during a grasp-hold-lift-hold run",
+          src: "/media/photos/thesis-arm-trajectory-tracking.png",
+          alt: "Shoulder pitch, elbow, and wrist pitch trajectories comparing port-Hamiltonian (PH) and position-PD control during a grasp sequence, with hold-error annotations",
           fit: "contain",
         },
       },
     ],
     results: [
-      "5 full real-robot runs (18 Sep 2026), a 14-segment choreography each.",
-      "Grip forces ≈110–480 g per finger (one flagged ring-finger outlier).",
-      "Arm tracking error ≈0.001–0.03 rad.",
-      "Logs exposed a faulty thumb-yaw sensor/actuator, documented rather than hidden.",
+      "Passivity-based force-mode control achieved full four-finger contact on the real G1's right hand (26 Oct 2026).",
+      "Peak per-finger forces 547–591 g in the best run, under the 600 g firmware limit.",
+      "3 of 5 runs (12 s grip) reached ≥0.76 hand closure.",
+      "Results feed Fig. 3 and Table I of an ECC conference paper draft.",
     ],
     stack: [
       "ROS 2 Jazzy",
@@ -318,12 +321,38 @@ export const person = {
     "Beyond the lab, I enjoy talking to people, discovering new paradigms, and travelling.",
 };
 
+export type CurrentRole = {
+  title: string;
+  institution: string;
+  dates: string;
+  detail: string;
+  image: MediaBlock;
+};
+
+export const currentRole: CurrentRole = {
+  title: "Research Assistant",
+  institution: "University of Groningen — ENTEG",
+  dates: "Oct 2026 – Present",
+  detail:
+    "Continuing to support Master's technicians and Bachelor's students in learning the robot stack — advising on robot functionality, use cases, and the movement limitations of the hardware, helping repair and redeploy the hand's software stack across devices, and providing professors with requirements-engineering input on the platform.",
+  image: {
+    kind: "image",
+    src: "/media/photos/enteg-lab-team-g1-tshirt.jpg",
+    alt: "Research team at ENTEG, University of Groningen, dressing the Unitree G1 humanoid in a Rijksuniversiteit Groningen t-shirt",
+  },
+};
+
 export type EducationEntry = {
   institution: string;
   degree: string;
   dates: string;
   detail: string;
-  image?: { src: string; alt: string; credit?: string };
+  image?: {
+    src: string;
+    alt: string;
+    credit?: string;
+    fit?: "cover" | "contain";
+  };
 };
 
 export const education: EducationEntry[] = [
@@ -336,6 +365,7 @@ export const education: EducationEntry[] = [
     image: {
       src: "/media/photos/campus-groningen-academy-building.jpg",
       alt: "University of Groningen, Academy Building",
+      fit: "contain",
     },
   },
   {
@@ -407,4 +437,24 @@ export const skillCategories: SkillCategory[] = [
     icon: "tools",
     items: ["MATLAB / Simulink", "Python (NumPy, pandas)", "Git / GitHub", "Docker"],
   },
+];
+
+export type SoftwareTool = {
+  name: string;
+  logo: string;
+};
+
+export const softwareTools: SoftwareTool[] = [
+  { name: "Python", logo: "/media/logos/python.svg" },
+  { name: "MATLAB / Simulink", logo: "/media/logos/matlab.svg" },
+  { name: "ROS 2", logo: "/media/logos/ros.svg" },
+  { name: "VS Code", logo: "/media/logos/vscode.svg" },
+  { name: "Git", logo: "/media/logos/git.svg" },
+  { name: "GitHub", logo: "/media/logos/github.svg" },
+  { name: "Docker", logo: "/media/logos/docker.svg" },
+  { name: "Ubuntu", logo: "/media/logos/ubuntu.svg" },
+  { name: "NVIDIA Isaac Sim", logo: "/media/logos/nvidia.svg" },
+  { name: "Wolfram Mathematica", logo: "/media/logos/wolfram-mathematica.svg" },
+  { name: "LaTeX", logo: "/media/logos/latex.svg" },
+  { name: "Obsidian", logo: "/media/logos/obsidian.svg" },
 ];
